@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -182,6 +185,14 @@ public class LyTest {
         String date = DateFormatUtils.format(new Date(), DateFormatUtils.ISO_8601_EXTENDED_DATETIME_FORMAT.getPattern());
         System.out.println(date);
     }
+
+    @Test
+    public void gson() {
+        Person person = Person.builder().id(1).name("admin").password("admin").build();
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        String json = gson.toJson(person);
+        System.out.println(json);
+    }
 }
 
 
@@ -202,6 +213,11 @@ class Info {
 @Builder
 @Data
 class Person {
+    @Expose
     private Integer id;
+    @Expose
     private String name;
+//    private transient String password;
+    @Expose(serialize = false, deserialize = false)
+    private String password;
 }
