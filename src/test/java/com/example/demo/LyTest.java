@@ -1,7 +1,6 @@
 package com.example.demo;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import lombok.Builder;
 import lombok.Data;
@@ -189,9 +188,13 @@ public class LyTest {
     @Test
     public void gson() {
         Person person = Person.builder().id(1).name("admin").password("admin").build();
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+//        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        Gson gson = new Gson();
         String json = gson.toJson(person);
         System.out.println(json);
+
+        Person de = gson.fromJson(json, Person.class);
+        System.out.println(de);
     }
 }
 
@@ -217,7 +220,7 @@ class Person {
     private Integer id;
     @Expose
     private String name;
-//    private transient String password;
-    @Expose(serialize = false, deserialize = false)
-    private String password;
+    private transient String password;
+//    @Expose(serialize = false, deserialize = false)
+//    private String password;
 }
