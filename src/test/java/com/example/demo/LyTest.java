@@ -196,6 +196,25 @@ public class LyTest {
         Person de = gson.fromJson(json, Person.class);
         System.out.println(de);
     }
+
+    @Test
+    public void date5() throws ParseException {
+        Date date = DateUtils.parseDate("2019-11-27T00:00:00".replace("T", " "), "yyyy-MM-dd HH:mm:ss");
+        System.out.println(date);
+    }
+
+    @Test
+    public void date6() throws ParseException {
+//        Date date = DateUtils.parseDate("2019-11-27T12:50:00", DateFormatUtils.ISO_8601_EXTENDED_DATETIME_FORMAT.);
+        Date date = DateFormatUtils.ISO_8601_EXTENDED_DATETIME_FORMAT.parse("2019-11-27T12:50:00");
+        System.out.println(date);
+    }
+
+//    @Test
+//    public void  builder() {
+//        Cat cat = Cat.builder().name("tom").build();
+//        System.out.println(cat);
+//    }
 }
 
 
@@ -224,3 +243,17 @@ class Person {
 //    @Expose(serialize = false, deserialize = false)
 //    private String password;
 }
+
+
+//@Builder
+//@Data
+//class Animal {
+//    private int id;
+//}
+//
+//@EqualsAndHashCode(callSuper = true)
+//@Data
+//@Builder
+//class Cat extends Animal {
+//    private String name;
+//}
