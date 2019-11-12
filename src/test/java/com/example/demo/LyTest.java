@@ -215,6 +215,12 @@ public class LyTest {
 //        Cat cat = Cat.builder().name("tom").build();
 //        System.out.println(cat);
 //    }
+
+    @Test
+    public void bigDecimal2() {
+        BigDecimal zero = BigDecimal.ZERO;
+        System.out.println(zero);
+    }
 }
 
 
