@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -14,6 +15,7 @@ import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class LyTest {
     @Test
     public void bigDecimal() {
@@ -74,7 +76,8 @@ public class LyTest {
     public void group() {
         List<Person> personList = Arrays.asList(Person.builder().id(1).name("Charles").build(),
                 Person.builder().id(2).name("Catalina").build());
-        Map<Boolean, List<Person>> map = personList.stream().collect(Collectors.groupingBy(person -> person.getId() == 1));
+        Map<Boolean, List<Person>> map =
+                personList.stream().collect(Collectors.groupingBy(person -> person.getId() == 1));
         System.out.println(map);
     }
 
@@ -100,7 +103,8 @@ public class LyTest {
         Date userTime = DateUtils.parseDate("2019-10-29 12:00:00", "yyyy-MM-dd HH:mm:ss");
         String userTimeString = DateFormatUtils.format(userTime, "yyyy-MM-dd HH:mm:ss");
         String[] time = userTimeString.split(" ");
-        Date todayTime = DateUtils.setMinutes(DateUtils.setHours(new Date(), Integer.parseInt(time[0])), Integer.parseInt(time[1]));
+        Date todayTime = DateUtils.setMinutes(DateUtils.setHours(new Date(), Integer.parseInt(time[0])),
+                Integer.parseInt(time[1]));
 
         String businessHours = "07:00:00-18:00:00";
         String[] businessHoursInterval = businessHours.split("-");
@@ -122,14 +126,14 @@ public class LyTest {
     }
 
     @Test
-    public void date2(){
+    public void date2() {
 //        Date date = DateUtils.parseDate("2019-10-28 20:20:00", "yyyy-MM-dd HH:mm:ss");
 
         String businessHours = "07:00:00-18:00:00";
         String[] businessHoursInterval = businessHours.split("-");
         String currentDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
-        String startTimeString = currentDate + " " +  businessHoursInterval[0];
-        String endTimeString = currentDate + " " +  businessHoursInterval[1];
+        String startTimeString = currentDate + " " + businessHoursInterval[0];
+        String endTimeString = currentDate + " " + businessHoursInterval[1];
 
         String useTimeString = "2019-10-30 7:30".split(StringUtils.SPACE)[1];
         String todayUseTimeString = currentDate + " " + useTimeString;
@@ -181,7 +185,8 @@ public class LyTest {
 
     @Test
     public void date4() {
-        String date = DateFormatUtils.format(new Date(), DateFormatUtils.ISO_8601_EXTENDED_DATETIME_FORMAT.getPattern());
+        String date = DateFormatUtils.format(new Date(),
+                DateFormatUtils.ISO_8601_EXTENDED_DATETIME_FORMAT.getPattern());
         System.out.println(date);
     }
 
@@ -220,6 +225,11 @@ public class LyTest {
     public void bigDecimal2() {
         BigDecimal zero = BigDecimal.ZERO;
         System.out.println(zero);
+    }
+
+    @Test
+    public void log() {
+        log.debug("Hi, {}", "阿黄");
     }
 }
 
