@@ -12,6 +12,8 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -230,6 +232,43 @@ public class LyTest {
     @Test
     public void log() {
         log.debug("Hi, {}", "阿黄");
+    }
+
+    @Test
+    public void date7() throws ParseException {
+        Date useTime = DateUtils.parseDate("2019-11-26 12:20:00", "yyyy-MM-dd HH:mm:ss");
+        Date planArrTime = DateUtils.parseDate("2019-11-26 12:50:00", "yyyy-MM-dd HH:mm:ss");
+        Date planDepTime = DateUtils.parseDate("2019-11-26 15:00:00", "yyyy-MM-dd HH:mm:ss");
+
+        long between = planDepTime.getTime() - useTime.getTime();
+        long result = between / (60 * 1000);
+        System.out.println(result);
+        // 用车时间到飞机起飞时间小于30分钟
+        if (result <= 30) {
+            System.out.println("起飞");
+        }
+
+        between = useTime.getTime() - planArrTime.getTime();
+        result = between / (60 * 1000);
+        System.out.println(result);
+        // 用车时间到飞机降落时间小于30分钟
+        if (between / (60 * 1000) <= 30) {
+            System.out.println(between);
+            System.out.println("降落");
+        }
+    }
+
+    @Test
+    public void duration() throws ParseException {
+        Date useTime = DateUtils.parseDate("2019-11-26 12:20:00", "yyyy-MM-dd HH:mm:ss");
+        Date planArrTime = DateUtils.parseDate("2019-11-26 12:50:00", "yyyy-MM-dd HH:mm:ss");
+        Date planDepTime = DateUtils.parseDate("2019-11-26 15:00:00", "yyyy-MM-dd HH:mm:ss");
+        String useTimeIso = DateFormatUtils.ISO_8601_EXTENDED_DATETIME_FORMAT.format(useTime);
+        System.out.println(useTimeIso);
+        LocalDateTime startT = LocalDateTime.parse(useTimeIso);
+        LocalDateTime endT = LocalDateTime.parse("2019-11-26T12:50:00");
+        Duration duration = Duration.between(startT, endT);
+        System.out.println(duration.getSeconds());
     }
 }
 
