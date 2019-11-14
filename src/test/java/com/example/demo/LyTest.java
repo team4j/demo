@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -260,15 +261,92 @@ public class LyTest {
 
     @Test
     public void duration() throws ParseException {
-        Date useTime = DateUtils.parseDate("2019-11-26 12:20:00", "yyyy-MM-dd HH:mm:ss");
-        Date planArrTime = DateUtils.parseDate("2019-11-26 12:50:00", "yyyy-MM-dd HH:mm:ss");
-        Date planDepTime = DateUtils.parseDate("2019-11-26 15:00:00", "yyyy-MM-dd HH:mm:ss");
+        Date useTime = DateUtils.parseDate("2019-11-26 12:20", "yyyy-MM-dd HH:mm");
         String useTimeIso = DateFormatUtils.ISO_8601_EXTENDED_DATETIME_FORMAT.format(useTime);
         System.out.println(useTimeIso);
         LocalDateTime startT = LocalDateTime.parse(useTimeIso);
         LocalDateTime endT = LocalDateTime.parse("2019-11-26T12:50:00");
         Duration duration = Duration.between(startT, endT);
-        System.out.println(duration.getSeconds());
+        System.out.println(duration.getSeconds() / 60);
+    }
+
+    @Test
+    public void duration2() throws ParseException {
+        // 接机时间
+        Date pickupUseTime = null;
+        // 送机时间
+        Date dropOffUseTime = null;
+
+        String planDeDateTime = "2019-11-14T12:00:00";
+        String planArrDateTime = "2019-11-14T14:00:00";
+        Date planDepTime = DateFormatUtils.ISO_DATETIME_FORMAT.parse(planDeDateTime);
+        Date planArrTime = DateFormatUtils.ISO_DATETIME_FORMAT.parse(planArrDateTime);
+        LocalDateTime planDepTimeLocal = LocalDateTime.parse(planDeDateTime);
+        LocalDateTime planArrTimeLocal = LocalDateTime.parse(planArrDateTime);
+        LocalDateTime now = LocalDateTime.now();
+
+        // 现在距离飞机计划起飞的时间
+        Duration durationDepTime = Duration.between(now, planDepTimeLocal);
+        // 现在距离飞机计划降落的时间
+        Duration durationArrTime = Duration.between(now, planArrTimeLocal);
+        System.out.println(durationDepTime.getSeconds());
+        System.out.println(durationArrTime.getSeconds());
+
+        // 距离起飞时间>4h
+        if (durationDepTime.getSeconds() > 4 * 60 * 60) {
+            pickupUseTime = DateUtils.addHours(planDepTime, -4);
+            dropOffUseTime = DateUtils.addMinutes(planArrTime, 30);
+            System.out.println("距离起飞时间>4h");
+        }
+
+        // 距离起飞时间0-4h
+        if (durationDepTime.getSeconds() >= 0 && durationDepTime.getSeconds() <= 4 * 60 * 60) {
+            pickupUseTime = new Date();
+            dropOffUseTime = DateUtils.addMinutes(planArrTime, 30);
+            System.out.println("距离起飞时间0-4h");
+        }
+
+        // 起飞时间与实际降落时间之间
+        if (durationDepTime.getSeconds() < 0 && durationArrTime.getSeconds() >= 0) {
+            pickupUseTime = new Date();
+            dropOffUseTime = DateUtils.addMinutes(planArrTime, 30);
+            System.out.println("起飞时间与实际降落时间之间");
+        }
+
+        // 实际降落时间与实际降落时间+30min之间
+        if (durationArrTime.getSeconds() < 0 && durationArrTime.getSeconds() >= -30 * 60) {
+            pickupUseTime = new Date();
+            dropOffUseTime = DateUtils.addMinutes(planArrTime, 35);
+            System.out.println("实际降落时间与实际降落时间+30min之间");
+        }
+
+        // >实际降落时间+30min
+        if (durationArrTime.getSeconds() < -30 * 60) {
+            pickupUseTime = new Date();
+            dropOffUseTime = new Date();
+            System.out.println(">实际降落时间+30min");
+        }
+
+        System.out.println(pickupUseTime);
+        System.out.println(dropOffUseTime);
+    }
+
+    @Test
+    public void stringFormat() {
+        String message = "%s";
+        System.out.println(String.format(message, 1));
+    }
+
+    @Test
+    public void localDateTime() {
+        System.out.println(DateTimeFormatter.BASIC_ISO_DATE);
+        System.out.println(DateTimeFormatter.ISO_DATE);
+        System.out.println(DateTimeFormatter.ISO_DATE_TIME);
+        System.out.println(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+        String time = "2019-11-14 14:00";
+        LocalDateTime localDateTime = LocalDateTime.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        System.out.println(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
     }
 }
 
