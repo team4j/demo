@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -347,6 +348,35 @@ public class LyTest {
         String time = "2019-11-14 14:00";
         LocalDateTime localDateTime = LocalDateTime.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         System.out.println(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+    }
+
+    @Test
+    public void integer() {
+        Integer i = null;
+
+        if (i > 0) {
+            System.out.println();
+        }
+    }
+
+    @Test
+    public void duration3() {
+        LocalDateTime useTimeLocal = LocalDateTime.parse("2019-11-17T21:45:00");
+        LocalDateTime planArrTime = LocalDateTime.parse("2019-11-17T21:15:00");
+
+        Duration duration = Duration.between(planArrTime, useTimeLocal);
+
+        // 用车时间到飞机降落时间小于30分钟
+        if (duration.getSeconds() < 30 * 60) {
+            System.out.println("ssfdsfds");
+        }
+    }
+
+    @Test
+    public void date2LocalDate() {
+        System.out.println(LocalDate.now().isBefore(LocalDate.parse("2019-11-20")));
+        System.out.println(LocalDate.now().compareTo(LocalDate.parse("2019-11-18")) <= 0);
+        System.out.println(LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
     }
 }
 
