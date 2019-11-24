@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 public class LyTest {
@@ -374,9 +375,42 @@ public class LyTest {
 
     @Test
     public void date2LocalDate() {
-        System.out.println(LocalDate.now().isBefore(LocalDate.parse("2019-11-20")));
-        System.out.println(LocalDate.now().compareTo(LocalDate.parse("2019-11-18")) <= 0);
-        System.out.println(LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+//        System.out.println(LocalDate.now().isBefore(LocalDate.parse("2019-11-20")));
+//        System.out.println(LocalDate.now().compareTo(LocalDate.parse("2019-11-18")) <= 0);
+//        System.out.println(LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+
+
+        if (LocalDate.now().compareTo(LocalDate.parse("2019-11-20")) > 0) {
+            System.out.println("sdfsdf");
+        }
+    }
+
+    @Test
+    public void coup() {
+        String json = "{\"id\":1342,\"couponName\":\"70元接送机券\",\"giftCard\":\"pOCyauBLUSlj01mncM1bDzxSKOm8\"," +
+                "\"batchNumber\":\"pOCyauBLUSlj01mncM1bDzxSKOm8\",\"couponHolder\":0,\"amount\":70," +
+                "\"cityId\":\"0000\",\"cityName\":\"全国\",\"productId\":\"12,13\",\"carTypeId\":\"1,2,3,4\"," +
+                "\"describe\":\"单笔接送机订单满100元可用\",\"status\":1,\"operator\":\"宋响1201423\",\"createTime\":\"2019-09-17 " +
+                "18:25:00\",\"carRate\":100,\"otherRate\":0,\"supplierRate\":0,\"userRange\":0,\"couponResource\":2," +
+                "\"supplierCode\":\"0000\"}";
+
+        Coup coupon = new Gson().fromJson(json, Coup.class);
+        String carTypeSign = "";
+        String productIdSign = "19";
+        String cityIdSign = "170";
+        System.out.println((!"0000".equals(coupon.getCarTypeId()) && !(coupon.getCarTypeId() + ",").contains(carTypeSign)));
+        System.out.println((!"0000".equals(coupon.getProductId()) && !(coupon.getProductId() + ",").contains(productIdSign)));
+        System.out.println((!"0000".equals(coupon.getCityId()) && !(coupon.getCityId() + ",").contains(cityIdSign)));
+    }
+
+    @Test
+    public void base64() {
+    }
+
+    @Test
+    public void stream() {
+        List<Integer> integerList = Stream.of(1, 2).collect(Collectors.toList());
+        integerList.forEach(System.out::println);
     }
 }
 
