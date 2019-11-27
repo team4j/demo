@@ -415,8 +415,8 @@ public class LyTest {
 
     @Test
     public void optional1() {
-        Integer integer = Stream.of(1, 2).filter(i -> i == 0).findFirst().orElse(null);
-        System.out.println(integer);
+        Optional<Integer> integer = Stream.of(1, 2).filter(i -> i == 1).findFirst();
+        System.out.println(integer.isPresent());
     }
 }
 
