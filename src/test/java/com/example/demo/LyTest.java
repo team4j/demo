@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
@@ -417,6 +418,15 @@ public class LyTest {
     public void optional1() {
         Optional<Integer> integer = Stream.of(1, 2).filter(i -> i == 1).findFirst();
         System.out.println(integer.isPresent());
+    }
+
+    @Test
+    public void exception() {
+        try {
+            int s = 1 / 0;
+        } catch (Exception e) {
+            System.out.println(ExceptionUtils.getStackTrace(e));
+        }
     }
 
 }
