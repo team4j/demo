@@ -5,17 +5,18 @@ import com.google.gson.annotations.Expose;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.text.SimpleDateFormat;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -429,6 +430,205 @@ public class LyTest {
         }
     }
 
+    @Test
+    public void groupBy() {
+        OrderPassenger passenger1 = OrderPassenger.builder().orderId(1).name("jack").build();
+        OrderPassenger passenger2 = OrderPassenger.builder().orderId(1).name("rose").build();
+        OrderPassenger passenger3 = OrderPassenger.builder().orderId(2).name("catalina").build();
+        OrderPassenger passenger4 = OrderPassenger.builder().orderId(3).name("charles").build();
+        List<OrderPassenger> passengerList = Arrays.asList(passenger1, passenger2, passenger3, passenger4);
+        Map<Integer, String> groupName = passengerList.stream()
+                .collect(Collectors.groupingBy(OrderPassenger::getOrderId, Collectors.mapping(OrderPassenger::getName
+                        , Collectors.joining(","))));
+        Map<Integer, List<OrderPassenger>> map =
+                passengerList.stream().collect(Collectors.groupingBy(OrderPassenger::getOrderId));
+
+//        List<OrderPassenger> finalPassengerList = new ArrayList<>();
+//        group.forEach((integer, orderPassengers) -> {
+//            StringBuilder names = new StringBuilder();
+//            orderPassengers.forEach(p -> names.append(p.getName()).append(','));
+//            names.deleteCharAt(names.length() - 1);
+//            OrderPassenger passenger = orderPassengers.get(0);
+//            passenger.setName(names.toString());
+//            finalPassengerList.add(passenger);
+//        });
+//
+//        System.out.println(finalPassengerList);
+
+        List<OrderPassenger> finalPassengerList = new ArrayList<>();
+        groupName.forEach((id, names) -> {
+            OrderPassenger passenger = map.get(id).get(0);
+            passenger.setName(names);
+            finalPassengerList.add(passenger);
+        });
+
+        System.out.println(finalPassengerList);
+    }
+
+    @Test
+    public void date8() {
+        Calendar c = new GregorianCalendar();
+        c.add(Calendar.DAY_OF_MONTH, 1);
+        String aoOrderToDate = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
+        c.add(Calendar.DAY_OF_MONTH, -30);
+        String aoOrderFromDate = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
+
+        System.out.println(aoOrderFromDate);
+        System.out.println(aoOrderToDate);
+    }
+
+    @Test
+    public void date9() throws ParseException {
+        Date date1 = DateUtils.parseDate("2020-01-07 00:00:00", "yyyy-MM-dd HH:mm:ss");
+        Date date2 = DateUtils.parseDate("2020-01-07 00:00:10", "yyyy-MM-dd HH:mm:ss");
+
+        long overTime = (date2.getTime() - date1.getTime()) / 1000;
+        System.out.println(overTime);
+    }
+
+    @Test
+    public void date10() {
+        long overTime = Duration.between(LocalDateTime.parse("2020-01-01T00:00:00", DateTimeFormatter.ISO_DATE_TIME),
+                LocalDateTime.parse("2020-01-01T01:01:01", DateTimeFormatter.ISO_DATE_TIME)).toMillis() / 1000;
+        // 小于1分钟
+        if (overTime < 60) {
+            System.out.println(overTime + "秒");
+        }
+        // 小于1小时
+        else if (overTime < 60 * 60) {
+            long min = overTime / 60;
+            long sec = overTime % 60;
+            System.out.println(min + "分" + sec + "秒");
+        }
+        // 小于1天
+        else if (overTime < 24 * 60 * 60) {
+            long hour = overTime / (60 * 60);
+            long residue = overTime % (60 * 60);
+            // 余数小于1分钟
+            if (residue < 60) {
+                System.out.println(hour + "时0分" + residue + "秒");
+            }
+            // 余数大于1分钟
+            else {
+                long min = residue / 60;
+                long sec = residue % 60;
+                System.out.println(hour + "时" + min + "分" + sec + "秒");
+            }
+        }
+        // 大于1天
+        else {
+            long day = overTime / (24 * 60 * 60);
+            long residue = overTime % (24 * 60 * 60);
+            // 余数小于1分钟
+            if (residue < 60) {
+                System.out.println(day + "天0时0分" + residue + "秒");
+            }
+            // 余数小于1小时
+            else if (residue < 60 * 60) {
+                long min = residue / 60;
+                residue = residue % 60;
+                System.out.println(day + "天0时" + min + "分" + residue + "秒");
+            }
+            // 余数大于1小时
+            else {
+                long hour = residue / (60 * 60);
+                residue = residue % (60 * 60);
+                // 小于1分
+                if (residue < 60) {
+                    System.out.println(day + "天" + hour + "时0分" + residue + "秒");
+                }
+                // 大于1分
+                else {
+                    long min = residue / 60;
+                    residue = residue % 60;
+                    System.out.println(day + "天" + hour + "时" + min + "分" + residue + "秒");
+                }
+            }
+        }
+    }
+
+    @Test
+    public void date11() {
+        long overTime = Duration.between(LocalDateTime.parse("2020-01-01T00:00:00", DateTimeFormatter.ISO_DATE_TIME),
+                LocalDateTime.parse("2020-01-01T00:00:01", DateTimeFormatter.ISO_DATE_TIME)).toMillis() / 1000;
+        System.out.println(this.secondToTime(overTime));
+
+        System.out.println(this.ms2dhms(overTime));
+    }
+
+    @Test
+    public void date12() {
+        System.out.println(System.currentTimeMillis());
+        System.out.println(LocalDateTime.now().toInstant(ZoneOffset.of("+8")).getEpochSecond());
+        System.out.println(LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8")));
+        System.out.println(LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli());
+        System.out.println(LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond());
+
+    }
+
+    private String secondToTime(long second) {
+        long days = second / 86400;//转换天数
+        second = second % 86400;//剩余秒数
+        long hours = second / 3600;//转换小时数
+        second = second % 3600;//剩余秒数
+        long minutes = second / 60;//转换分钟
+        second = second % 60;//剩余秒数
+        if (0 < days) {
+            return days + "天" + hours + "小时" + minutes + "分" + second + "秒";
+        } else {
+            return hours + "小时" + minutes + "分" + second + "秒";
+        }
+    }
+
+    private String ms2dhms(long secondCount) {
+        String retval;
+
+        long days = secondCount / (60 * 60 * 24);
+        long hours = (secondCount % (60 * 60 * 24)) / (60 * 60);
+        long minutes = (secondCount % (60 * 60)) / 60;
+        long seconds = secondCount % 60;
+
+        if (days > 0) {
+            retval = days + "d" + hours + "h" + minutes + "m" + seconds + "s";
+        } else if (hours > 0) {
+            retval = hours + "h" + minutes + "m" + seconds + "s";
+        } else if (minutes > 0) {
+            retval = minutes + "m" + seconds + "s";
+        } else {
+            retval = seconds + "s";
+        }
+
+        return retval;
+    }
+
+    @Test
+    public void json() throws InvocationTargetException, IllegalAccessException {
+        Notify notify = new Notify();
+        NotifyDetail detail = new NotifyDetail();
+        detail.setMessage("哈哈哈哈");
+        notify.setDetail(detail);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(notify);
+        System.out.println(json);
+
+        Notify jsonObj = gson.fromJson(json, Notify.class);
+//        NotifyDetail notifyDetail = (NotifyDetail) jsonObj.getDetail();
+        NotifyDetail notifyDetail = gson.fromJson(jsonObj.getDetail().toString(), NotifyDetail.class);
+        System.out.println(notifyDetail.getMessage());
+
+        NotifyDetail notifyDetail1 = new NotifyDetail();
+        BeanUtils.populate(notifyDetail1, (Map)jsonObj.getDetail());
+        System.out.println(notifyDetail1);
+    }
+
+    @Test
+    public void bigDecimal3() {
+        BigDecimal bigDecimal = new BigDecimal("3.14");
+        String string = bigDecimal.toString();
+        System.out.println(string);
+    }
+
 }
 
 
@@ -471,3 +671,20 @@ class Person {
 //class Cat extends Animal {
 //    private String name;
 //}
+
+@Builder
+@Data
+class OrderPassenger {
+    private Integer orderId;
+    private String name;
+}
+
+@Data
+class Notify {
+    private Object detail;
+}
+
+@Data
+class NotifyDetail {
+    private String message;
+}
