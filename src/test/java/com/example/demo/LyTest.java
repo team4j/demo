@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -629,6 +630,19 @@ public class LyTest {
         System.out.println(string);
     }
 
+    @Test
+    public void hasMap() {
+        Map<String, String> map = new HashMap<>();
+        System.out.println(1 << 4);
+    }
+
+    @Test
+    public void cas() {
+        AtomicInteger integer = new AtomicInteger(1);
+        int value = integer.get();
+        System.out.println(value);
+        System.out.println(integer.compareAndSet(1, 2));
+    }
 }
 
 
