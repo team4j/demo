@@ -720,7 +720,7 @@ public class LyTest {
     }
 
     @Test
-    public void optimizeForLoop() {
+    public void optimizeForLoopJava8() {
         long start = System.currentTimeMillis();
         List<Order> orderList = new ArrayList<>();
         List<Passenger> passengerList = new ArrayList<>();
@@ -732,9 +732,37 @@ public class LyTest {
         Map<Integer, Passenger> passengerMap = passengerList.stream().collect(Collectors.toMap(Passenger::getOrderId, p -> p));
 
         List<OrderPassenger2> orderPassengerList = new ArrayList<>();
-        orderList.forEach(o -> {
-            orderPassengerList.add(new OrderPassenger2(o.getId(), o.getSource(), passengerMap.get(o.getId()).getName()));
-        });
+        orderList.forEach(o ->
+            orderPassengerList.add(new OrderPassenger2(o.getId(), o.getSource(), passengerMap.get(o.getId()).getName())));
+        System.out.println(orderPassengerList.size());
+
+        long end = System.currentTimeMillis();
+        System.out.println("耗时:" + (end - start) + "ms");
+    }
+
+    @Test
+    public void optimizeForLoopMap() {
+        long start = System.currentTimeMillis();
+        List<Order> orderList = new ArrayList<>();
+        List<Passenger> passengerList = new ArrayList<>();
+        for (int i = 0; i < 1000000; i++) {
+            orderList.add(new Order(i, "APP"));
+            passengerList.add(new Passenger(i, i, "张三" + i));
+        }
+
+//        Map<Integer, Passenger> passengerMap = passengerList.stream().collect(Collectors.toMap(Passenger::getOrderId, p -> p));
+        Map<Integer, Passenger> passengerMap = new HashMap<>();
+        for (Passenger passenger : passengerList) {
+            passengerMap.put(passenger.getOrderId(), passenger);
+        }
+
+        List<OrderPassenger2> orderPassengerList = new ArrayList<>();
+//        orderList.forEach(o ->
+//                orderPassengerList.add(new OrderPassenger2(o.getId(), o.getSource(), passengerMap.get(o.getId()).getName())));
+        for (Order order : orderList) {
+            orderPassengerList.add(new OrderPassenger2(order.getId(), order.getSource(), passengerMap.get(order.getId()).getName()));
+        }
+
         System.out.println(orderPassengerList.size());
 
         long end = System.currentTimeMillis();
