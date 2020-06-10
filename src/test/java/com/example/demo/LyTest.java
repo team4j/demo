@@ -12,8 +12,13 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -22,6 +27,10 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.nio.channels.FileChannel.MapMode.READ_ONLY;
+import static java.nio.channels.FileChannel.MapMode.READ_WRITE;
+import static java.nio.file.StandardOpenOption.*;
 
 @Slf4j
 public class LyTest {
@@ -642,6 +651,94 @@ public class LyTest {
         int value = integer.get();
         System.out.println(value);
         System.out.println(integer.compareAndSet(1, 2));
+    }
+
+    @Test
+    public void nioBuffer() {
+        // 获取缓冲区
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        // 写入缓冲区
+        String content = "abcdefghijklmnopqrstuvwxyz";
+        buffer.put(content.getBytes());
+        byte[] dst = new byte[buffer.position()];
+        // 切换读模式
+        buffer.flip();
+        // 从缓冲区读取数据
+        buffer.get(dst, 0, dst.length);
+        System.out.println(new String(dst));
+        // 清空缓冲区(数据并未被清空)
+        buffer.clear();
+    }
+
+    @Test
+    public void nioChannel() throws IOException, InterruptedException {
+        long start = System.currentTimeMillis();
+
+        String intPath = "/Users/yudequan/Downloads/哈哈/1993蜜桃成熟时HD1080P粤语中字无删减高清修复版.mp4/1993蜜桃成熟时HD1080P粤语中字无删减高清修复版.mp4";
+        String outPath = "/Users/yudequan/Downloads/哈哈/1993蜜桃成熟时HD1080P粤语中字无删减高清修复版.mp4/1.mp4";
+
+        FileChannel inChannel = FileChannel.open(Paths.get(intPath), READ);
+        FileChannel outChannel = FileChannel.open(Paths.get(outPath), READ, WRITE, CREATE);
+
+        MappedByteBuffer inMapBuf = inChannel.map(READ_ONLY, 0, inChannel.size());
+        MappedByteBuffer outMapBuf = outChannel.map(READ_WRITE, 0, inChannel.size());
+
+        byte[] dst = new byte[inMapBuf.limit()];
+        inMapBuf.get(dst);
+        outMapBuf.put(dst);
+
+        inChannel.close();
+        outChannel.close();
+        long end = System.currentTimeMillis();
+        System.out.println("耗时：" + (end - start));
+
+        Thread.sleep(Integer.MAX_VALUE);
+    }
+
+    @Test
+    public void forLoop() {
+        long start = System.currentTimeMillis();
+        List<Order> orderList = new ArrayList<>();
+        List<Passenger> passengerList = new ArrayList<>();
+        for (int i = 0; i < 10000; i++) {
+            orderList.add(new Order(i, "APP"));
+            passengerList.add(new Passenger(i, i, "张三" + i));
+        }
+
+        List<OrderPassenger2> orderPassengerList = new ArrayList<>();
+        for (Passenger passenger : passengerList) {
+            for (Order order : orderList) {
+                if (passenger.getOrderId().equals(order.getId())) {
+                    orderPassengerList.add(new OrderPassenger2(order.getId(), order.getSource(), passenger.getName()));
+                }
+            }
+        }
+        System.out.println(orderPassengerList.size());
+
+        long end = System.currentTimeMillis();
+        System.out.println("耗时:" + (end - start) + "ms");
+    }
+
+    @Test
+    public void optimizeForLoop() {
+        long start = System.currentTimeMillis();
+        List<Order> orderList = new ArrayList<>();
+        List<Passenger> passengerList = new ArrayList<>();
+        for (int i = 0; i < 1000000; i++) {
+            orderList.add(new Order(i, "APP"));
+            passengerList.add(new Passenger(i, i, "张三" + i));
+        }
+
+        Map<Integer, Passenger> passengerMap = passengerList.stream().collect(Collectors.toMap(Passenger::getOrderId, p -> p));
+
+        List<OrderPassenger2> orderPassengerList = new ArrayList<>();
+        orderList.forEach(o -> {
+            orderPassengerList.add(new OrderPassenger2(o.getId(), o.getSource(), passengerMap.get(o.getId()).getName()));
+        });
+        System.out.println(orderPassengerList.size());
+
+        long end = System.currentTimeMillis();
+        System.out.println("耗时:" + (end - start) + "ms");
     }
 }
 

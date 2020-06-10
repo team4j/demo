@@ -2,18 +2,14 @@ package com.example.demo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
- * @author dequan.yu
- * @version V1.0
- * @description TODO
- * @date 2019/11/27
- **/
+ * Created by dequan.yu on 2020/6/10.
+ */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Order {
+public class OrderPassenger2 {
     private Integer id;
     private String source;
+    private String name;
 }
