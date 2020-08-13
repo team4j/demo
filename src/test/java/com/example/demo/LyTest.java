@@ -768,6 +768,12 @@ public class LyTest {
         long end = System.currentTimeMillis();
         System.out.println("耗时:" + (end - start) + "ms");
     }
+
+    @Test
+    public void isBank() {
+        System.out.println(StringUtils.isBlank(""));
+        System.out.println(StringUtils.isBlank("               "));
+    }
 }
 
 
