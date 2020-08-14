@@ -774,6 +774,19 @@ public class LyTest {
         System.out.println(StringUtils.isBlank(""));
         System.out.println(StringUtils.isBlank("               "));
     }
+
+    @Test
+    public void lambda() {
+        List<Integer> list = Stream.of(1, 2, 3).collect(Collectors.toList());
+        list.forEach(i -> {
+            if (i == 2) {
+                System.out.println(i);
+                return;
+            }
+            System.out.println("------");
+        });
+        System.out.println("lambda表达式不可以使用continue/break，可以使用return代替continue");
+    }
 }
 
 
