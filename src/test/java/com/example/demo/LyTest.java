@@ -787,6 +787,19 @@ public class LyTest {
         });
         System.out.println("lambda表达式不可以使用continue/break，可以使用return代替continue");
     }
+
+    @Test
+    public void integerEquals() {
+        Integer a = 1, b = 1;
+        System.out.println(a == b);
+
+        Integer j = 127, k = 127;
+        System.out.println(j == k);
+
+        Integer m = 128, n = 128;
+        System.out.println(m == n);
+        System.out.println(m.equals(n));
+    }
 }
 
 
