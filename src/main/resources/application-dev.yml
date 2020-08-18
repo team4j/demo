@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    password: 1qaz!QAZ
+    username: root
+    url: jdbc:mysql://localhost:3306/java?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  type-aliases-package: com.example.demo.model
+  mapper-locations: classpath:mapper/*Mapper.xml
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com:
+      example:
+        demo:
+          mapper: debug
