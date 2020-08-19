@@ -19,4 +19,9 @@ public class TaskServiceImpl implements TaskService {
     public Task selectByPrimaryKey(Integer id) {
         return taskMapper.selectByPrimaryKey(id);
     }
+
+    @Override
+    public void updateStatus() {
+
+    }
 }

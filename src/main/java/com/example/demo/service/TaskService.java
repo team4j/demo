@@ -7,4 +7,6 @@ import com.example.demo.model.Task;
  */
 public interface TaskService {
     Task selectByPrimaryKey(Integer id);
+
+    void updateStatus();
 }
