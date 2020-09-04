@@ -1,8 +1,11 @@
 package com.example.demo;
 
+import com.google.gson.Gson;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by dequan.yu on 2020/8/31.
@@ -19,10 +22,14 @@ public class OkHttpTest {
     }
 
     public void run() throws Exception {
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("supplierCode", "GYS2020082843715447");
+        requestData.put("configId", 1);
         Request request = new Request.Builder()
-                .url("http://publicobject.com/helloworld.txt")
+                .url("http://10.101.164.67:8183/api/merchant/credit/wmsAutomaticInput")
+                .post(RequestBody.create(new Gson().toJson(requestData), MediaType.parse("application/json; charset=utf-8")))
                 .build();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 500; i++) {
             client.newCall(request).enqueue(new Callback() {
                 @Override public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
@@ -31,11 +38,6 @@ public class OkHttpTest {
                 @Override public void onResponse(Call call, Response response) throws IOException {
                     try (ResponseBody responseBody = response.body()) {
                         if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
-                        Headers responseHeaders = response.headers();
-                        for (int i = 0, size = responseHeaders.size(); i < size; i++) {
-                            System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
-                        }
 
                         System.out.println(responseBody.string());
                     }
