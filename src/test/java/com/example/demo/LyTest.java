@@ -841,6 +841,15 @@ public class LyTest {
             log.error("算术异常，{}", "哈哈哈", e);
         }
     }
+
+    @Test
+    public void logException2() {
+        try {
+            int i = 5 / 0;
+        } catch (Exception e) {
+            log.error("算术异常，{}", e);
+        }
+    }
 }
 
 
