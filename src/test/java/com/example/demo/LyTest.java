@@ -1,9 +1,12 @@
 package com.example.demo;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -800,6 +803,44 @@ public class LyTest {
         System.out.println(m == n);
         System.out.println(m.equals(n));
     }
+
+    @Test
+    public void stringJoin() {
+        List<String> list = ImmutableList.of("Hollis","hollischuang","Java干货");
+
+        String s1 = list.stream().reduce(new StringBuilder(), (sb, s) -> sb.append(s).append(','), StringBuilder::append).toString();
+
+
+        String s = list.stream().reduce((a, b) -> a + "," + b).toString();
+
+        String collect = list.stream().collect(Collectors.joining(":"));
+
+        System.out.println(s1);
+        System.out.println(s);
+        System.out.println(collect);
+
+        List<String> integerList = Stream.of("1", "2").collect(Collectors.toList());
+        String s2 = integerList.stream().collect(Collectors.joining(","));
+        System.out.println(s2);
+    }
+
+    @Test
+    public void json2Map() {
+        Notify notify = Notify.builder().detail("哈哈").build();
+        Gson gson = new Gson();
+        String json = gson.toJson(notify);
+        Map<String, Object> map = gson.fromJson(json, HashMap.class);
+        System.out.println(map);
+    }
+
+    @Test
+    public void logException() {
+        try {
+            int i = 5 / 0;
+        } catch (Exception e) {
+            log.error("算术异常，{}", "哈哈哈", e);
+        }
+    }
 }
 
 
@@ -850,7 +891,10 @@ class OrderPassenger {
     private String name;
 }
 
+@Builder
+@NoArgsConstructor
 @Data
+@AllArgsConstructor
 class Notify {
     private Object detail;
 }
