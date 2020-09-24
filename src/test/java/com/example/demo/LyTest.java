@@ -22,6 +22,8 @@ import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -849,6 +851,15 @@ public class LyTest {
         } catch (Exception e) {
             log.error("算术异常，{}", e);
         }
+    }
+
+    @Test
+    public void percent() {
+        System.out.println((new BigDecimal(100).multiply(new BigDecimal("0.02")).toString() + "%"));
+        NumberFormat format = DecimalFormat.getPercentInstance();
+        format.setMaximumFractionDigits(2);
+        String result = format.format(new BigDecimal("0.02"));
+        System.out.println(result);
     }
 }
 
