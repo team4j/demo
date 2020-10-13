@@ -3,12 +3,15 @@ package com.example.demo.web.controller;
 import com.example.demo.dto.EnumRequest;
 import com.example.demo.dto.EnumResponse;
 import com.example.demo.enums.State;
+import com.example.demo.model.Task;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * Created by dequan.yu on 2020/9/19.
@@ -22,5 +25,10 @@ public class TestController {
         Gson gson = new Gson();
 //        log.info(gson.toJson(request));
         return EnumResponse.builder().state(State.INIT).build();
+    }
+
+    @PostMapping("/testListReq")
+    public List<Task> testListReq(@RequestBody List<Task> taskList) {
+        return taskList;
     }
 }

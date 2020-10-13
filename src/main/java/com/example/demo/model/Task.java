@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +17,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 @Builder
+@TableName("task")
 public class Task implements Serializable {
+    @TableId
     private Integer id;
 
     private String name;

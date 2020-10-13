@@ -28,6 +28,9 @@ class TaskDaoTest {
 
     @Test
     void insert() {
+        Task task = Task.builder().name("任务").status((byte) 0).build();
+        int result = this.taskMapper.insert(task);
+        Assertions.assertEquals(1, result);
     }
 
     @Test

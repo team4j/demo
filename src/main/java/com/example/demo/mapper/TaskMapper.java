@@ -1,11 +1,10 @@
 package com.example.demo.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.demo.model.Task;
 
-public interface TaskMapper {
+public interface TaskMapper extends BaseMapper<Task> {
     int deleteByPrimaryKey(Integer id);
-
-    int insert(Task record);
 
     int insertSelective(Task record);
 

@@ -861,6 +861,17 @@ public class LyTest {
         String result = format.format(new BigDecimal("0.02"));
         System.out.println(result);
     }
+
+    @Test
+    public void exMsg() {
+        try {
+            throw new RuntimeException("哈哈");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(ExceptionUtils.getMessage(e));
+            System.out.println(ExceptionUtils.getRootCauseMessage(e));
+        }
+    }
 }
 
 
