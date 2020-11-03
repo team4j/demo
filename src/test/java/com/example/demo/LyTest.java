@@ -114,9 +114,9 @@ public class LyTest {
 
     @Test
     public void optional() {
-        System.out.println(Optional.of(null).isPresent());
-        System.out.println(Optional.of("").isPresent());
-        System.out.println(Optional.ofNullable("").isPresent());
+        System.out.println(Optional.ofNullable(null).isPresent());
+//        System.out.println(Optional.of("").isPresent());
+//        System.out.println(Optional.ofNullable("").isPresent());
     }
 
     @Test
@@ -871,6 +871,33 @@ public class LyTest {
             System.out.println(ExceptionUtils.getMessage(e));
             System.out.println(ExceptionUtils.getRootCauseMessage(e));
         }
+    }
+
+    @Test
+    public void local() {
+        System.out.println(LocalDateTime.now());
+    }
+
+    @Test
+    public void foreach2() {
+        List<Integer> integerList = Stream.of(1, 0, 2).collect(Collectors.toList());
+        integerList.forEach(i -> {
+            try {
+                System.out.println(2 / i);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        });
+    }
+
+    @Test
+    public void localDateTime2() {
+        System.out.println(LocalDateTime.now());
+    }
+
+    @Test
+    public void power() {
+        System.out.println(50 * (long)Math.pow(10, 5 - 1));
     }
 }
 
