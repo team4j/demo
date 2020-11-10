@@ -899,6 +899,16 @@ public class LyTest {
     public void power() {
         System.out.println(50 * (long)Math.pow(10, 5 - 1));
     }
+
+    @Test
+    public void merge() {
+        Map<Integer, Integer> map = new HashMap<>();
+        List<Integer> list = Stream.of(1, 2, 3).collect(Collectors.toList());
+        list.forEach(l -> {
+            map.merge(l, l, Integer::sum);
+        });
+        System.out.println(map);
+    }
 }
 
 
