@@ -2,6 +2,8 @@ package com.example.demo;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.annotations.Expose;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -893,6 +895,7 @@ public class LyTest {
     @Test
     public void localDateTime2() {
         System.out.println(LocalDateTime.now());
+        System.out.println(LocalDate.now().plusDays(1).atStartOfDay());
     }
 
     @Test
@@ -908,6 +911,17 @@ public class LyTest {
             map.merge(l, l, Integer::sum);
         });
         System.out.println(map);
+    }
+
+    @Test
+    public void parseJson() {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalTime.class, (JsonDeserializer<LocalTime>) (json, type, jsonDeserializationContext) -> {
+                    String datetime = json.getAsJsonPrimitive().getAsString();
+                    return LocalTime.parse(datetime, DateTimeFormatter.ofPattern("HH:mm"));
+                }).create();
+        T t = gson.fromJson("{\"localTime\": \"11:45\"}", T.class);
+        System.out.println(Math.abs(Duration.between(LocalTime.now(), t.getLocalTime()).toHours()));
     }
 }
 
@@ -970,4 +984,9 @@ class Notify {
 @Data
 class NotifyDetail {
     private String message;
+}
+
+@Data
+class T {
+    private LocalTime localTime;
 }
