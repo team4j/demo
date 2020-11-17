@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.List;
+
 /**
  * Created by dequan.yu on 2020/8/18.
  */
@@ -58,5 +60,11 @@ class TaskDaoTest {
 
     @Test
     void updateByPrimaryKey() {
+    }
+
+    @Test
+    public void getTaskList() {
+        List<Task> taskList = this.taskMapper.getTaskList();
+        Assertions.assertTrue(taskList.size() > 0);
     }
 }

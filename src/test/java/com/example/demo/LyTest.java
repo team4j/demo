@@ -923,6 +923,12 @@ public class LyTest {
         T t = gson.fromJson("{\"localTime\": \"11:45\"}", T.class);
         System.out.println(Math.abs(Duration.between(LocalTime.now(), t.getLocalTime()).toHours()));
     }
+
+    @Test
+    public void list() {
+        List<Integer> list = Stream.of(1, 2, 3).collect(Collectors.toList());
+        System.out.println(list);
+    }
 }
 
 
