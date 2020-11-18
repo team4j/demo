@@ -18,3 +18,5 @@ logging:
       example:
         demo:
           mapper: info
+    org:
+      springframework: info

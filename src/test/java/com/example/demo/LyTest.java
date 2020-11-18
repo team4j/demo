@@ -929,6 +929,13 @@ public class LyTest {
         List<Integer> list = Stream.of(1, 2, 3).collect(Collectors.toList());
         System.out.println(list);
     }
+
+    @Test
+    public void parallelStream() {
+        Stream.of(1, 2, 3, 4, 5, 5, 7 ,8, 9, 0).parallel().forEach(System.out::print);
+        System.out.println();
+        Stream.of(1, 2, 3, 4, 5, 5, 7 ,8, 9, 0).forEach(System.out::print);
+    }
 }
 
 

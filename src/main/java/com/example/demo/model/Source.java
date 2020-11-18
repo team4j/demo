@@ -11,23 +11,29 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * task
+ * source
  * @author 
  */
+@Data
+@TableName("source")
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Builder
-@TableName("task")
-public class Task implements Serializable {
+public class Source implements Serializable {
     @TableId(type = IdType.AUTO)
     private Integer id;
 
-    private String name;
+    private Integer whId;
 
-    private Integer status;
+    private Integer goodsId;
+
+    private String dateTime;
+
+    private Integer storeCount;
 
     private String tag;
+
+    private String logTraceId;
 
     private static final long serialVersionUID = 1L;
 }

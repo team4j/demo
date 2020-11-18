@@ -17,7 +17,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task selectByPrimaryKey(Integer id) {
-        return taskMapper.selectByPrimaryKey(id);
+        return taskMapper.selectById(id);
     }
 
     @Override
