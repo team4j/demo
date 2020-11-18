@@ -9,8 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -78,21 +80,27 @@ class TaskDaoTest {
         String result = transactionTemplate.execute(action -> {
             Task task = Task.builder().name("任务二").status(1).tag("测试").build();
             this.taskMapper.insert(task);
+//            System.out.println(1 / 0);
             return "哈哈";
         });
         log.info(result);
 
         // 没有结果返回
-            transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-                @Override
-                protected void doInTransactionWithoutResult(TransactionStatus status) {
-                    Task task = Task.builder().name("任务二").status(1).tag("测试").build();
-                    taskMapper.insert(task);
-                    System.out.println(1 / 0);
-                }
-            });
-
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                innerTx();
+                System.out.println(1 / 0);
+            }
+        });
 
         log.info("结束");
+    }
+
+    @Rollback(value = false)
+    @Transactional
+    public void innerTx() {
+        Task task = Task.builder().name("任务二").status(1).tag("测试").build();
+        taskMapper.insert(task);
     }
 }
