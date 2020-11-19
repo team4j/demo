@@ -16,6 +16,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.Test;
+import org.springframework.cglib.beans.BeanCopier;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -936,6 +937,22 @@ public class LyTest {
         System.out.println();
         Stream.of(1, 2, 3, 4, 5, 5, 7 ,8, 9, 0).forEach(System.out::print);
     }
+
+    @Test
+    public void copyBeanProperties() throws InvocationTargetException, IllegalAccessException {
+        List<Integer> list = Stream.of(1, 2, 3).collect(Collectors.toList());
+        J j = J.builder().build();
+//        H h = H.builder().list(list).j(j).build();
+        H h = H.builder().build();
+        I i = I.builder().build();
+//        org.springframework.beans.BeanUtils.copyProperties(h, i);
+        final BeanCopier beanCopier = BeanCopier.create(H.class, I.class, false);
+        beanCopier.copy(h, i, null);
+        System.out.println();
+        list.add(4);
+        System.out.println(h);
+        System.out.println(i);
+    }
 }
 
 
@@ -1002,4 +1019,24 @@ class NotifyDetail {
 @Data
 class T {
     private LocalTime localTime;
+}
+
+@Data
+@Builder
+class H {
+    @Builder.Default
+    private List<Integer> list = new ArrayList<>();
+    private J j;
+}
+
+@Data
+@Builder
+class I {
+    private List<Integer> list = new ArrayList<>();
+    private J j;
+}
+
+@Data
+@Builder
+class J {
 }
