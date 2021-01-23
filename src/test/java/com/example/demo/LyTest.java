@@ -969,7 +969,7 @@ public class LyTest {
 
     @Test
     public void localDateTimeStart() {
-        LocalDateTime beginTime = LocalDateTime.of(LocalDate.now(),LocalTime.MIN);
+        LocalDateTime beginTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
         System.out.println(beginTime);
     }
 }
