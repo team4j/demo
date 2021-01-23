@@ -807,6 +807,8 @@ public class LyTest {
         Integer m = 128, n = 128;
         System.out.println(m == n);
         System.out.println(m.equals(n));
+
+        System.out.println(new Integer(2000) == 2000);
     }
 
     @Test
@@ -952,6 +954,23 @@ public class LyTest {
         list.add(4);
         System.out.println(h);
         System.out.println(i);
+    }
+
+    @Test
+    public void equal() {
+        System.out.println(new Integer(1).equals(true));
+        System.out.println();
+    }
+
+    @Test
+    public void ceil() {
+        System.out.println(Math.ceil(5.6));
+    }
+
+    @Test
+    public void localDateTimeStart() {
+        LocalDateTime beginTime = LocalDateTime.of(LocalDate.now(),LocalTime.MIN);
+        System.out.println(beginTime);
     }
 }
 

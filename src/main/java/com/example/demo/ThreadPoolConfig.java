@@ -22,7 +22,7 @@ public class ThreadPoolConfig {
         //根据ThreadPoolTaskExecutor 创建建线程池
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         //为线程设置初始的线程数量 5条线程
-        executor.setCorePoolSize(1);
+        executor.setCorePoolSize(2);
         //为线程设置最大的线程数量 10条线程
         executor.setMaxPoolSize(3);
         //为任务队列设置最大 任务数量
