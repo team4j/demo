@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -49,5 +52,10 @@ public class TestController {
 
         log.info("结束testAsync");
         return "success";
+    }
+
+    @GetMapping("/redirect")
+    public void testRedirect(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendRedirect("https://www.google.com");
     }
 }

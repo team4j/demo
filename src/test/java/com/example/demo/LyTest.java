@@ -971,6 +971,40 @@ public class LyTest {
     public void localDateTimeStart() {
         LocalDateTime beginTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
         System.out.println(beginTime);
+        System.out.println(LocalDate.now().plusDays(1).atStartOfDay().plusHours(6));
+
+    }
+
+    @Test
+    public void progressRate() {
+        NumberFormat format = DecimalFormat.getPercentInstance();
+        format.setMaximumFractionDigits(2);
+        System.out.println(format.format((double) (1) / 3));;
+    }
+
+    @Test
+    public void optional2() {
+        Optional<Object> optional = Optional.of(new Object());
+        optional.ifPresent(System.out::println);
+    }
+
+    @Test
+    public void bigDecimal4() {
+        System.out.println(new BigDecimal(5).multiply(new BigDecimal(1)).multiply(new BigDecimal("2.51").divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP)).setScale(2, BigDecimal.ROUND_HALF_UP));
+    }
+
+    @Test
+    public void bigDecimal5() {
+        //质检增加一个百分点
+        BigDecimal onePoint = BigDecimal.valueOf(0.00);
+        System.out.println(BigDecimal.valueOf(0.03).add(onePoint));
+    }
+
+    @Test
+    public void regex() {
+        String line = "leak secret    ['blerg', '1.2.3'],     ['git+https://user:password']";
+        String[] array = line.split("\\s{4}");
+        Stream.of(array).forEach(System.out::println);
     }
 }
 

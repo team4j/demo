@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: mysql
 
 mybatis-plus:
   type-enums-package: com.example.demo.enums
