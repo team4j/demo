@@ -17,6 +17,6 @@ logging:
     com:
       example:
         demo:
-          mapper: info
+          mapper: trace
     org:
-      springframework: info
+      springframework: trace
