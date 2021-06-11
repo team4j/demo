@@ -43,11 +43,12 @@ public class RestTemplateTest {
 
         List<Integer> ids = new ArrayList<>(Arrays.asList(1145022, 990518));
 
+        RestRequest request = RestRequest.builder()
+                .reason("仓库人员要求批量取消打包任务")
+                .reasonType(5).build();
+
         ids.forEach(id -> {
-            RestRequest request = RestRequest.builder()
-                    .id(1145333)
-                    .reason("仓库人员要求批量取消打包任务")
-                    .reasonType(5).build();
+            request.setId(1145333);
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("tctoken", token);
