@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -1006,6 +1007,19 @@ public class LyTest {
         String[] array = line.split("\\s{4}");
         Stream.of(array).forEach(System.out::println);
     }
+
+    @Test
+    public void listMerge() {
+        Employee emp0 = Employee.builder().id(1).name("张三").build();
+        Employee emp1 = Employee.builder().id(1).name("李四").build();
+        Employee emp2 = Employee.builder().id(1).name("王五").build();
+
+        List<Employee> employees = Lists.newArrayList(emp0, emp1, emp2);
+
+        Map<Integer, String> map = employees.stream().collect(Collectors.toMap(Employee::getId, Employee::getName, (v0, v1) -> v0 + v1));
+
+        System.out.println(map);
+    }
 }
 
 
@@ -1092,4 +1106,11 @@ class I {
 @Data
 @Builder
 class J {
+}
+
+@Builder
+@Data
+class Employee {
+    private Integer id;
+    private String name;
 }

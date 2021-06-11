@@ -1,6 +1,5 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dao.TaskDao;
 import com.example.demo.mapper.TaskMapper;
 import com.example.demo.mapper.TestMapper;
 import com.example.demo.model.Task;
@@ -19,7 +18,7 @@ import java.util.Map;
 public class TaskServiceImpl implements TaskService {
     private final TaskMapper taskMapper;
 
-    private final TaskDao taskDao;
+//    private final TaskDao taskDao;
 
     private final TestMapper testMapper;
 
