@@ -9,6 +9,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,4 +63,22 @@ public class RestTemplateTest {
         });
     }
 
+    @Test
+    public void async() {
+        String url = "https://wmsapi.youxianbianli.com/wms/sorting-task/cancel";
+        String token = "31895F8r3vGGXafPYjcUwixWO07UIQCqjB91AJoE8Cjeex/G55pYZGAKchiQTFQdHGVp/wOD8TnNiBqqGIzV3efyxM2Y1OYjF+Icm1GsLqvENRiYFOpZW8WvLU1yGxw98wdWSRP9F7mtCumhKZxRi4SIW3oSNN3wvlW4DKh206KyDURwKYf36opBN77AQjkY8/QtjoiMS43SqvSl0STDvp0c4cLTO6z0ViUOHTmNMvcproyw22XfKPM/FaZUrnZoRyDqwcZZmkgZRCXC5/gbCBxXL1wURRp6Dav6GwsnUG+3L+vAxPu07/ZiSioI7VznAopEOKHrNVGrV/2Pu6R/A8unN6wwGFF4dO0Ln22g5INvWQInOjUOa+BGwYj7eSGhZ3J0pjKNmKm7wm9EnwAvUfK4YOVO1D/yIlGbi3bAbDAPs1WsNQ8mvDaWY3Gh95htdu+oC3U0NGetxhSnzfqspi01avezJIoEAoKB2L1HQYpmdI9nzyVQYK/IKEJiyQgbKrwjcY474mxL99OaFudEMCmv1D6B4nW6ABJkzheNqKtwVI5yJ5mWt3abjba43Ol49h7fVkp+RqHZg4BReDs8GFcF5nSIkuIh9QyWgjFBFuRHHHpfzJTmjCSUl418cKeeM/o75sLitcN8Q17d1G4Fwb9QACbTi0JBAY0a8HBxKa/crCuTVOh1vTJNuLTFB6geu0RoZdizadg+5uSAGAx/Cr4pAWn/0LMxgtaq79nr65iH99OHyPCyKZsBvMMeNfpWK5fHmYB3JE9pvZR0Wyy+sQj77HJVuuNEWw";
+
+        RestRequest request = RestRequest.builder()
+                .id(1144960)
+                .reason("仓库人员要求批量取消打包任务")
+                .reasonType(5).build();
+
+        Mono<RestResponse> mono =  WebClient.create().post()
+                .uri(url)
+                .header("tctoken", token)
+                .body(Mono.just(request), RestRequest.class)
+                .retrieve()
+                .bodyToMono(RestResponse.class);
+        System.out.println(mono.block());
+    }
 }
