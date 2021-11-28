@@ -999,6 +999,10 @@ public class LyTest {
         //质检增加一个百分点
         BigDecimal onePoint = BigDecimal.valueOf(0.00);
         System.out.println(BigDecimal.valueOf(0.03).add(onePoint));
+
+        new Thread(() -> {
+
+        });
     }
 
     @Test
